@@ -8,7 +8,7 @@ from sklearn.linear_model import LogisticRegression
 
 from skopt import BayesSearchCV
 
-X,y = make_classification()
+X, y = make_classification()
 
 # X = pd.DataFrame(np_[0])
 # y = pd.DataFrame(np_[1])
@@ -27,22 +27,11 @@ SVM = SVC(random_state=0, probability=True).fit(X_train, y_train)
 NB = GaussianNB().fit(X_train, y_train)
 KNN = KNeighborsClassifier().fit(X_train, y_train)
 
-lr_param = {
-    "penalty": ['l1','l2', 'elasticnet'],
-    "C": [0.5, 1],
-    "l1_ratio": [0.5]
-}
+lr_param = {"penalty": ["l1", "l2", "elasticnet"], "C": [0.5, 1], "l1_ratio": [0.5]}
 
-knn_param ={
-    'weights': ['uniform', 'distance'],
-    'n_neighbors': [3, 5, 7]
+knn_param = {"weights": ["uniform", "distance"], "n_neighbors": [3, 5, 7]}
 
-}
-
-svm_param = {
-    'kernel': ['linear', 'poly', 'rbf', 'sigmoid']
-}
-
+svm_param = {"kernel": ["linear", "poly", "rbf", "sigmoid"]}
 
 
 lr_pred = LR.predict(X_test)
@@ -55,17 +44,16 @@ svm_pred_proba = SVM.predict_proba(X_test)
 NB.predict_proba(X_test)
 KNN.predict_proba(X_test)
 
-scores = [LR.score(X_test,y_test),
-          SVM.score(X_test,y_test),
-          NB.score(X_test,y_test),
-          KNN.score(X_test,y_test)]
+scores = [
+    LR.score(X_test, y_test),
+    SVM.score(X_test, y_test),
+    NB.score(X_test, y_test),
+    KNN.score(X_test, y_test),
+]
 
 
 opt_svc = BayesSearchCV(
-    SVC(random_state=0, probability=True),
-    svm_param,
-    n_iter=32,
-    random_state=0
+    SVC(random_state=0, probability=True), svm_param, n_iter=32, random_state=0
 )
 
 _ = opt_svc.fit(X_train, y_train)
@@ -75,7 +63,7 @@ opt_lr = BayesSearchCV(
     LogisticRegression(random_state=0, solver="saga"),
     lr_param,
     n_iter=32,
-    random_state=0
+    random_state=0,
 )
 
 _ = opt_lr.fit(X_train, y_train)
